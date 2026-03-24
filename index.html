@@ -1,423 +1,232 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Moda | Minimalista & Elegante</title>
+    <title>CyberSafe Pro | Segurança Digital Inteligente</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-
-        :root {
-            --primary: #2D2A26;
-            --accent: #C5A48A;
-            --bg-soft: #F9F7F2;
-            --white: #FFFFFF;
-        }
-
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-soft);
-            color: var(--primary);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
         }
-
-        .product-card:hover .product-image {
-            transform: scale(1.05);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .transition-soft {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .hero-gradient {
+            background: radial-gradient(circle at top right, #1e1b4b, #020617);
         }
-
-        .cart-drawer {
-            transform: translateX(100%);
-            transition: transform 0.4s ease-in-out;
-        }
-
-        .cart-drawer.open {
-            transform: translateX(0);
-        }
-
-        .page-content {
-            display: none;
-        }
-
-        .page-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-soft);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #D1D5DB;
-            border-radius: 10px;
-        }
-
-        .filter-btn.active {
-            background-color: #f3f4f6;
-            font-weight: 600;
-            border-color: var(--accent);
+        /* Animação suave para o progresso do scan */
+        .progress-ring {
+            transition: stroke-dasharray 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-200 antialiased">
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-40 border-b border-stone-200">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="text-2xl font-bold tracking-tighter cursor-pointer" onclick="navigateTo('home')">LUMINA</div>
-            
-            <div class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-widest">
-                <a href="javascript:void(0)" onclick="navigateTo('shop', 'nova')" class="nav-link hover:text-[#C5A48A] transition-colors">Nova Coleção</a>
-                <a href="javascript:void(0)" onclick="navigateTo('shop', 'feminino')" class="nav-link hover:text-[#C5A48A] transition-colors">Feminino</a>
-                <a href="javascript:void(0)" onclick="navigateTo('shop', 'masculino')" class="nav-link hover:text-[#C5A48A] transition-colors">Masculino</a>
-                <a href="javascript:void(0)" onclick="navigateTo('sustentabilidade')" class="nav-link hover:text-[#C5A48A] transition-colors">Sustentabilidade</a>
-            </div>
-
-            <div class="flex items-center space-x-6">
-                <div class="relative hidden sm:block">
-                    <input type="text" id="search-input" placeholder="Buscar..." class="bg-transparent border-b border-stone-300 focus:border-[#C5A48A] outline-none text-sm py-1 px-2 w-32 focus:w-48 transition-all">
-                    <button onclick="handleSearch()" class="absolute right-0 hover:text-[#C5A48A]"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <!-- Navegação -->
+    <nav class="fixed w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-white">CyberSafe<span class="text-indigo-500">Pro</span></span>
                 </div>
-                <button onclick="toggleCart()" class="relative hover:text-[#C5A48A]">
-                    <i class="fa-solid fa-bag-shopping text-xl"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#C5A48A] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                </button>
-                <button class="md:hidden" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars text-xl"></i></button>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#recursos" class="hover:text-indigo-400 transition-colors">Recursos</a>
+                    <a href="#tecnologia" class="hover:text-indigo-400 transition-colors">Tecnologia</a>
+                    <a href="#precos" class="hover:text-indigo-400 transition-colors">Planos</a>
+                </div>
+                <div>
+                    <button onclick="openModal('trialModal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20 active:scale-95">
+                        Começar Agora
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Content Sections -->
-    <div id="pages">
-        
-        <!-- Home Page -->
-        <section id="page-home" class="page-content active">
-            <header class="pt-20">
-                <div class="relative h-[80vh] w-full overflow-hidden flex items-center bg-[#E5E0D8]">
-                    <div class="absolute inset-0 opacity-40">
-                        <div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center"></div>
-                    </div>
-                    <div class="relative max-w-7xl mx-auto px-6 w-full">
-                        <div class="max-w-xl space-y-6">
-                            <span class="inline-block px-3 py-1 bg-[#C5A48A] text-white text-xs font-bold uppercase tracking-widest rounded">Primavera 2024</span>
-                            <h1 class="text-5xl md:text-7xl font-light leading-tight">Essência do <br><span class="font-bold italic">Minimalismo</span></h1>
-                            <p class="text-stone-600 text-lg">Descubra peças atemporais desenhadas para durar gerações. Materiais orgânicos e corte impecável.</p>
-                            <button onclick="navigateTo('shop')" class="bg-[#2D2A26] text-white px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#C5A48A] transition-soft">Explorar Coleção</button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <section class="max-w-7xl mx-auto px-6 py-20">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                    <div>
-                        <h2 class="text-3xl font-bold">Destaques da Semana</h2>
-                        <p class="text-stone-500">Curadoria exclusiva das peças mais desejadas.</p>
-                    </div>
-                    <div class="flex space-x-4" id="category-filters">
-                        <button onclick="filterProducts('todos')" class="filter-btn active px-4 py-2 border border-stone-200 rounded-full text-sm hover:border-[#C5A48A] transition-colors">Todos</button>
-                        <button onclick="filterProducts('alfaiataria')" class="filter-btn px-4 py-2 border border-stone-200 rounded-full text-sm hover:border-[#C5A48A] transition-colors">Alfaiataria</button>
-                        <button onclick="filterProducts('basicos')" class="filter-btn px-4 py-2 border border-stone-200 rounded-full text-sm hover:border-[#C5A48A] transition-colors">Básicos</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="products-grid">
-                    <!-- Gerado via JS -->
-                </div>
-            </section>
-        </section>
-
-        <!-- Shop/Catalog Page -->
-        <section id="page-shop" class="page-content pt-32 min-h-screen">
-            <div class="max-w-7xl mx-auto px-6">
-                <h2 id="shop-title" class="text-4xl font-bold mb-8 uppercase tracking-tighter">Catálogo Completo</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="shop-grid">
-                    <!-- Gerado via JS -->
-                </div>
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 md:pt-48 md:pb-32 hero-gradient overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest text-indigo-400 uppercase bg-indigo-400/10 rounded-full">
+                Proteção de Próxima Geração
+            </span>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
+                Sua segurança digital, <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">simplificada.</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-slate-400 mb-10 leading-relaxed">
+                Proteja seus dados, identidade e privacidade com tecnologia de criptografia militar sem comprometer a performance do seu dispositivo.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="openModal('trialModal')" class="bg-white text-slate-950 px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-200 transition-all active:scale-95 shadow-xl shadow-white/10">
+                    Teste Grátis por 14 dias
+                </button>
+                <button onclick="startDemo()" class="glass-card text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all active:scale-95">
+                    Ver Demonstração
+                </button>
             </div>
-        </section>
-
-        <!-- Sustentabilidade Page -->
-        <section id="page-sustentabilidade" class="page-content pt-32 min-h-screen bg-[#F2F4F0]">
-            <div class="max-w-4xl mx-auto px-6 py-12 text-center">
-                <i class="fa-solid fa-leaf text-6xl text-green-700 mb-6"></i>
-                <h2 class="text-4xl font-bold mb-6">Nosso Compromisso</h2>
-                <p class="text-lg text-stone-600 leading-relaxed mb-8">
-                    Na Lumina, acreditamos que a moda não deve custar o planeta. Trabalhamos exclusivamente com tecidos orgânicos, tingimentos naturais e garantimos que 100% da nossa cadeia produtiva receba salários justos.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mt-12">
-                    <div class="bg-white p-6 rounded shadow-sm">
-                        <h4 class="font-bold mb-2">Materiais</h4>
-                        <p class="text-sm text-stone-500">Linho europeu e algodão Pima 100% certificado.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded shadow-sm">
-                        <h4 class="font-bold mb-2">Zero Plástico</h4>
-                        <p class="text-sm text-stone-500">Nossas embalagens são compostáveis e livres de plásticos.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded shadow-sm">
-                        <h4 class="font-bold mb-2">Circularidade</h4>
-                        <p class="text-sm text-stone-500">Oferecemos programa de reparo vitalício para suas peças.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Checkout Page (Simulado) -->
-        <section id="page-checkout" class="page-content pt-32 min-h-screen">
-            <div class="max-w-xl mx-auto px-6 py-12">
-                <h2 class="text-3xl font-bold mb-8">Finalizar Pedido</h2>
-                <form id="checkout-form" class="space-y-6" onsubmit="processCheckout(event)">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex flex-col">
-                            <label class="text-xs font-bold uppercase mb-1">Nome</label>
-                            <input type="text" required class="border p-3 rounded bg-white">
-                        </div>
-                        <div class="flex flex-col">
-                            <label class="text-xs font-bold uppercase mb-1">Sobrenome</label>
-                            <input type="text" required class="border p-3 rounded bg-white">
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="text-xs font-bold uppercase mb-1">Endereço de Entrega</label>
-                        <input type="text" required class="border p-3 rounded bg-white">
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="text-xs font-bold uppercase mb-1">Cartão de Crédito</label>
-                        <input type="text" placeholder="0000 0000 0000 0000" required class="border p-3 rounded bg-white">
-                    </div>
-                    <button type="submit" class="w-full bg-[#2D2A26] text-white py-4 font-bold uppercase tracking-widest hover:bg-[#C5A48A] transition-soft">Pagar Agora</button>
-                </form>
-            </div>
-        </section>
-    </div>
-
-    <!-- Cart Drawer -->
-    <div id="cart-drawer" class="cart-drawer fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl flex flex-col">
-        <div class="p-6 border-b flex justify-between items-center">
-            <h2 class="text-xl font-bold uppercase tracking-tight">Sua Sacola</h2>
-            <button onclick="toggleCart()" class="text-stone-400 hover:text-black transition-colors">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
         </div>
-        <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6">
-            <!-- Items do carrinho via JS -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-20">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600 rounded-full blur-[120px]"></div>
         </div>
-        <div class="p-6 border-t bg-stone-50 space-y-4">
-            <div class="flex justify-between font-bold text-lg">
-                <span>Subtotal</span>
-                <span id="cart-total">R$ 0,00</span>
+    </header>
+
+    <!-- Recursos -->
+    <section id="recursos" class="py-24 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Por que escolher o CyberSafe Pro?</h2>
+                <p class="text-slate-400">Desenvolvido para utilizadores que não abrem mão da privacidade.</p>
             </div>
-            <button onclick="navigateTo('checkout')" class="w-full bg-[#2D2A26] text-white py-4 font-bold uppercase tracking-widest hover:bg-[#C5A48A] transition-soft">Ir para o Pagamento</button>
-        </div>
-    </div>
-
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-white z-[100] transform translate-y-full transition-transform duration-500 flex flex-col items-center justify-center space-y-8 text-2xl font-light">
-        <button onclick="toggleMobileMenu()" class="absolute top-8 right-8 text-stone-400"><i class="fa-solid fa-xmark"></i></button>
-        <a href="javascript:void(0)" onclick="navigateTo('home'); toggleMobileMenu()" class="hover:italic">Início</a>
-        <a href="javascript:void(0)" onclick="navigateTo('shop', 'nova'); toggleMobileMenu()" class="hover:italic">Nova Coleção</a>
-        <a href="javascript:void(0)" onclick="navigateTo('shop', 'feminino'); toggleMobileMenu()" class="hover:italic">Feminino</a>
-        <a href="javascript:void(0)" onclick="navigateTo('shop', 'masculino'); toggleMobileMenu()" class="hover:italic">Masculino</a>
-        <a href="javascript:void(0)" onclick="navigateTo('sustentabilidade'); toggleMobileMenu()" class="hover:italic">Sustentabilidade</a>
-    </div>
-
-    <script>
-        // Database de Produtos
-        const products = [
-            { id: 1, name: 'Camisa Linho Off-White', price: 259.00, cat: 'basicos', gen: 'masculino', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=500&q=80' },
-            { id: 2, name: 'Blazer Terracota Estruturado', price: 489.00, cat: 'alfaiataria', gen: 'feminino', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=500&q=80' },
-            { id: 3, name: 'Vestido Midi Minimal', price: 320.00, cat: 'basicos', gen: 'feminino', img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500&q=80' },
-            { id: 4, name: 'Calça Pantalona Taupe', price: 380.00, cat: 'alfaiataria', gen: 'feminino', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=500&q=80' },
-            { id: 5, name: 'Trench Coat Clássico', price: 750.00, cat: 'alfaiataria', gen: 'masculino', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=500&q=80' },
-            { id: 6, name: 'Regata Seda Cru', price: 180.00, cat: 'basicos', gen: 'feminino', img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=500&q=80' }
-        ];
-
-        let cart = JSON.parse(localStorage.getItem('lumina-cart')) || [];
-
-        // Inicialização
-        window.onload = () => {
-            renderProducts(products, 'products-grid');
-            updateCartUI();
-        };
-
-        // Navegação SPA
-        function navigateTo(pageId, category = null) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(`page-${pageId}`);
-            if(target) target.classList.add('active');
-            window.scrollTo(0,0);
-
-            if(pageId === 'shop') {
-                const title = category ? `Coleção ${category}` : "Catálogo Completo";
-                document.getElementById('shop-title').innerText = title;
-                const filtered = category ? products.filter(p => p.gen === category || category === 'nova') : products;
-                renderProducts(filtered, 'shop-grid');
-            }
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('translate-y-full');
-            menu.classList.toggle('translate-y-0');
-        }
-
-        // Busca
-        function handleSearch() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            if(!query) return;
-            const results = products.filter(p => p.name.toLowerCase().includes(query));
-            navigateTo('shop');
-            document.getElementById('shop-title').innerText = `Resultados para: "${query}"`;
-            renderProducts(results, 'shop-grid');
-        }
-
-        // Filtros
-        function filterProducts(type) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
             
-            const filtered = type === 'todos' ? products : products.filter(p => p.cat === type);
-            renderProducts(filtered, 'products-grid');
-        }
-
-        function renderProducts(items, containerId) {
-            const container = document.getElementById(containerId);
-            if(!container) return;
-
-            if(items.length === 0) {
-                container.innerHTML = '<p class="col-span-full text-center py-20 text-stone-400">Nenhum produto encontrado.</p>';
-                return;
-            }
-
-            container.innerHTML = items.map(p => `
-                <div class="product-card group cursor-pointer animate-fade-in" onclick="addToCart(${p.id})">
-                    <div class="relative overflow-hidden aspect-[3/4] bg-stone-100 rounded-sm mb-4">
-                        <div class="w-full h-full bg-cover bg-center product-image transition-soft" style="background-image: url('${p.img}')"></div>
-                        <div class="absolute bottom-4 left-4 right-4 translate-y-12 group-hover:translate-y-0 transition-soft opacity-0 group-hover:opacity-100">
-                            <button class="w-full bg-white text-black py-3 text-xs font-bold uppercase tracking-tighter shadow-lg hover:bg-black hover:text-white transition-soft">Adicionar à Sacola</button>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl hover:border-indigo-500/50 transition-all group cursor-default">
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04kM12 21.48l.342-1.333c1.246-.465 2.303-1.063 3.148-1.78a11.975 11.975 0 005.13-9.43L12 21.48z"></path></svg>
                     </div>
-                    <h3 class="font-medium text-stone-800">${p.name}</h3>
-                    <p class="text-stone-500 text-sm font-light uppercase tracking-widest text-[10px]">${p.cat}</p>
-                    <p class="font-bold mt-1">R$ ${p.price.toFixed(2)}</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Criptografia Total</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Seus dados são cifrados antes mesmo de saírem do seu dispositivo.</p>
                 </div>
-            `).join('');
-        }
+                <div class="glass-card p-8 rounded-3xl hover:border-cyan-500/50 transition-all group cursor-default">
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Velocidade Máxima</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">Navegue com o máximo de performance sem quedas de velocidade.</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl hover:border-purple-500/50 transition-all group cursor-default">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Segurança IA</h3>
+                    <p class="text-slate-400 leading-relaxed text-sm">A nossa IA deteta ameaças antes de se tornarem um problema real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Carrinho
-        function toggleCart() {
-            document.getElementById('cart-drawer').classList.toggle('open');
-        }
-
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            localStorage.setItem('lumina-cart', JSON.stringify(cart));
-            updateCartUI();
-            showToast(`${product.name} adicionado.`);
-            if(!document.getElementById('cart-drawer').classList.contains('open')) {
-                toggleCart();
-            }
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            localStorage.setItem('lumina-cart', JSON.stringify(cart));
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cart-items');
-            const count = document.getElementById('cart-count');
-            const total = document.getElementById('cart-total');
-
-            count.innerText = cart.length;
-
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-20">
-                        <i class="fa-solid fa-bag-shopping text-stone-200 text-5xl mb-4"></i>
-                        <p class="text-stone-400">Sua sacola está vazia.</p>
-                    </div>`;
-                total.innerText = "R$ 0,00";
-                return;
-            }
-
-            container.innerHTML = cart.map((item, index) => `
-                <div class="flex items-start space-x-4 border-b border-stone-100 pb-6">
-                    <div class="w-20 h-24 bg-stone-100 rounded-sm flex-shrink-0 bg-cover bg-center" style="background-image: url('${item.img}')"></div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start">
-                            <h4 class="text-sm font-bold text-stone-800 leading-tight">${item.name}</h4>
-                            <button onclick="removeFromCart(${index})" class="text-stone-300 hover:text-red-500 transition-colors">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
+    <!-- Tecnologia / Dashboard -->
+    <section id="tecnologia" class="py-20 bg-slate-900/50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl overflow-hidden shadow-2xl">
+                <div class="bg-slate-800/50 px-6 py-4 flex items-center justify-between border-b border-slate-700">
+                    <div class="flex items-center gap-2">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
                         </div>
-                        <p class="text-sm font-bold mt-2">R$ ${item.price.toFixed(2)}</p>
+                        <span class="text-xs text-slate-500 font-mono ml-4">cyber-shield-v10.local / dashboard</span>
+                    </div>
+                    <span id="scanStatus" class="text-[10px] font-bold uppercase tracking-widest text-green-500">Sistema Seguro</span>
+                </div>
+                <div class="p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center">
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-bold text-white mb-4">Teste a Nossa Interface</h3>
+                        <p class="text-slate-400 mb-8">Execute uma verificação simulada para entender como cuidamos do seu computador sem anúncios irritantes.</p>
+                        <button id="scanBtn" onclick="runScan()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-all active:scale-95 flex items-center gap-3">
+                            <svg id="scanIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <span>Iniciar Verificação</span>
+                        </button>
+                    </div>
+                    <div class="w-full md:w-64 bg-slate-800 rounded-2xl p-6 border border-slate-700">
+                        <p class="text-xs text-slate-400 uppercase font-bold mb-4">Proteção em Tempo Real</p>
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                <path class="text-slate-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path id="progressCircle" class="text-indigo-500 transition-all duration-300" stroke-width="3" stroke-dasharray="0, 100" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <div id="progressText" class="absolute inset-0 flex items-center justify-center font-bold text-2xl text-white">0%</div>
+                        </div>
+                        <p id="actionLabel" class="text-center text-xs text-slate-500 font-medium italic">Aguardando comando...</p>
                     </div>
                 </div>
-            `).join('');
+            </div>
+        </div>
+    </section>
 
-            const sum = cart.reduce((acc, curr) => acc + curr.price, 0);
-            total.innerText = `R$ ${sum.toFixed(2)}`;
-        }
+    <!-- Preços -->
+    <section id="precos" class="py-24 max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Planos Transparentes</h2>
+            <p class="text-slate-400">Escolha a proteção ideal para as suas necessidades.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Plano 1 -->
+            <div class="glass-card p-8 rounded-3xl border border-slate-800 flex flex-col">
+                <h4 class="text-lg font-bold mb-2">Básico</h4>
+                <div class="text-3xl font-black mb-6">Grátis</div>
+                <ul class="text-slate-400 text-sm space-y-4 mb-10 flex-1">
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> Scan Mensal</li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> Proteção Navegador</li>
+                </ul>
+                <button onclick="openModal('trialModal')" class="w-full py-3 rounded-xl border border-slate-700 font-bold hover:bg-white/5 transition-all active:scale-95">Selecionar</button>
+            </div>
+            <!-- Plano 2 -->
+            <div class="bg-indigo-600 p-8 rounded-3xl shadow-2xl shadow-indigo-500/20 flex flex-col transform md:-translate-y-4">
+                <span class="bg-white text-indigo-600 text-[10px] font-bold px-2 py-1 rounded w-fit mb-4">RECOMENDADO</span>
+                <h4 class="text-lg font-bold mb-2 text-white">Profissional</h4>
+                <div class="text-3xl font-black mb-6 text-white">9,99€<span class="text-sm font-normal">/mês</span></div>
+                <ul class="text-indigo-100 text-sm space-y-4 mb-10 flex-1">
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> Scan em tempo real</li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> VPN Ilimitada</li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> Proteção contra Phishing</li>
+                </ul>
+                <button onclick="openModal('trialModal')" class="w-full py-3 rounded-xl bg-white text-indigo-600 font-bold hover:bg-slate-100 transition-all active:scale-95 shadow-lg">Começar Agora</button>
+            </div>
+            <!-- Plano 3 -->
+            <div class="glass-card p-8 rounded-3xl border border-slate-800 flex flex-col">
+                <h4 class="text-lg font-bold mb-2">Empresarial</h4>
+                <div class="text-3xl font-black mb-6">Contate-nos</div>
+                <ul class="text-slate-400 text-sm space-y-4 mb-10 flex-1">
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> Dispositivos ilimitados</li>
+                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> Suporte 24/7 Dedicado</li>
+                </ul>
+                <button onclick="openModal('trialModal')" class="w-full py-3 rounded-xl border border-slate-700 font-bold hover:bg-white/5 transition-all active:scale-95">Ver Detalhes</button>
+            </div>
+        </div>
+    </section>
 
-        // Checkout
-        function processCheckout(event) {
-            event.preventDefault();
-            const btn = event.target.querySelector('button');
-            btn.innerText = "Processando...";
-            btn.disabled = true;
+    <!-- Footer -->
+    <footer class="border-t border-slate-900 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
+                <div class="col-span-2">
+                    <div class="flex items-center justify-center md:justify-start gap-2 mb-6">
+                        <div class="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center text-[10px] font-bold">CP</div>
+                        <span class="text-lg font-bold text-white">CyberSafe Pro</span>
+                    </div>
+                    <p class="text-slate-500 text-sm max-w-xs mx-auto md:mx-0">Liderando o caminho para uma internet mais segura e privada para todos.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 text-sm">Legal</h4>
+                    <ul class="text-slate-500 text-sm space-y-2">
+                        <li><a href="javascript:void(0)" onclick="openModal('legalModal')" class="hover:text-indigo-400">Termos</a></li>
+                        <li><a href="javascript:void(0)" onclick="openModal('legalModal')" class="hover:text-indigo-400">Privacidade</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 text-sm">Apoio</h4>
+                    <ul class="text-slate-500 text-sm space-y-2">
+                        <li><a href="javascript:void(0)" onclick="openModal('trialModal')" class="hover:text-indigo-400">Contato</a></li>
+                        <li><a href="#tecnologia" class="hover:text-indigo-400">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-900 text-center text-slate-600 text-[10px] uppercase tracking-widest">
+                &copy; 2024 CyberSafe Pro S.A. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
 
-            setTimeout(() => {
-                showToast("Pedido realizado com sucesso!");
-                cart = [];
-                localStorage.removeItem('lumina-cart');
-                updateCartUI();
-                navigateTo('home');
-                btn.innerText = "Pagar Agora";
-                btn.disabled = false;
-                event.target.reset();
-            }, 2000);
-        }
-
-        // UI Helpers
-        function showToast(msg) {
-            const existing = document.querySelector('.toast-msg');
-            if(existing) existing.remove();
-
-            const toast = document.createElement('div');
-            toast.className = "toast-msg fixed bottom-8 left-1/2 -translate-x-1/2 bg-[#2D2A26] text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest z-[100] transition-all transform shadow-2xl";
-            toast.innerText = msg;
-            toast.style.opacity = '0';
-            toast.style.transform = 'translate(-50%, 20px)';
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.opacity = '1';
-                toast.style.transform = 'translate(-50%, 0)';
-            }, 10);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
-    </script>
-</body>
-</html>
+    <!-- MODAL: Teste Grátis -->
+    <div id="trialModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm transition-all">
+        <div class="glass-card bg-
